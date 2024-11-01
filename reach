@@ -1,4 +1,4 @@
-local circleSize = 5
+local circleSize = 4
 local showCircle = true
 
 local function isInsideCircle(position)
