@@ -1,7 +1,8 @@
+-- Создаем новый ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-
+-- Создаем текстовое сообщение
 local messageFrame = Instance.new("Frame")
 messageFrame.Size = UDim2.new(1, 0, 1, 0)
 messageFrame.BackgroundTransparency = 0.5
@@ -18,21 +19,79 @@ messageLabel.Font = Enum.Font.SourceSansBold
 messageLabel.TextScaled = true
 messageLabel.Parent = messageFrame
 
-
+-- Загружаем и воспроизводим звук
 local sound = Instance.new("Sound")
 sound.SoundId = "rbxassetid://1843660600" -- Замените на ID нужного вам звука
 sound.Volume = 10 -- Установите громкость
 sound.Parent = game.Workspace
 
+-- Настройка освещения для создания страшной атмосферы, но еще темнее
+local lighting = game:GetService("Lighting")
+lighting.Brightness = 0.5 * 0.5 -- Сделали яркость в два раза меньше (на 50% темнее)
+lighting.ColorShift_Top = Color3.new(0.2 * 0.5, 0.2 * 0.5, 0.2 * 0.5) -- Темный оттенок сверху (на 50% темнее)
+lighting.ColorShift_Bottom = Color3.new(0.2 * 0.5, 0.2 * 0.5, 0.2 * 0.5) -- Темный оттенок снизу (на 50% темнее)
+lighting.OutdoorAmbient = Color3.new(0.2 * 0.5, 0.2 * 0.5, 0.2 * 0.5) -- Темная окружающая среда (на 50% темнее)
+lighting.ClockTime = 0 -- Ночное время
 
+-- Включаем туман для создания мрачной атмосферы, но менее плотный (но еще темнее)
+lighting.FogColor = Color3.new(0.2 * 0.5, 0.2 * 0.5, 0.2 * 0.5) -- Темный туман (на 50% темнее)
+lighting.FogStart = 0
+lighting.FogEnd = 200 * 0.5 -- Меньший диапазон тумана для плотности (на 50% меньше)
+
+-- Добавляем темный шейдер, но немного менее интенсивный (но еще темнее)
+local bloomEffect = Instance.new("BloomEffect")
+bloomEffect.Intensity = 0.2 * 0.5 -- Сделали интенсивность в два раза меньше (на 50% темнее)
+bloomEffect.Threshold = 0.6
+bloomEffect.Size = 6
+bloomEffect.Parent = lighting
+
+local colorCorrectionEffect = Instance.new("ColorCorrectionEffect")
+colorCorrectionEffect.TintColor = Color3.new(0.8 * 0.5, 0.6 * 0.5, 0.6 * 0.5) -- Очень теплый оттенок (на 50% темнее)
+colorCorrectionEffect.Contrast = 0.1 * 0.5 -- Увеличили контраст (на 50% больше)
+colorCorrectionEffect.Saturation = -0.1 * 0.5 -- Уменьшили насыщенность (на 50% меньше)
+colorCorrectionEffect.Parent = lighting
+
+-- Добавляем локальный источник света (например, фонарь)
+local flashlight = Instance.new("PointLight")
+flashlight.Brightness = 10
+flashlight.Range = 20
+flashlight.Color = Color3.new(1, 0.9, 0.7) -- Теплый желтоватый цвет
+flashlight.Parent = game.Players.LocalPlayer.Character.Head
+
+-- Функция для отображения сообщения и воспроизведения звука
 local function showEffect()
     sound:Play()
     messageFrame.Visible = true
-    
-
-    wait(10)
+    wait(5)
     messageFrame.Visible = false
 end
 
-
+-- Вызываем функцию для демонстрации
 showEffect()
+
+-- Постоянно обновляем положение фонаря относительно головы игрока
+while true do
+    if game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
+        flashlight.Parent = game.Players.LocalPlayer.Character.Head
+    end
+    wait(0.1)
+end
+
+-- Функция для отображения случайной картинки на весь экран
+local function showRandomImage()
+    while true do
+        local imageLabel = Instance.new("ImageLabel")
+        imageLabel.Size = UDim2.new(1, 0, 1, 0) -- Размер на весь экран
+        imageLabel.Position = UDim2.new(0, 0, 0, 0) -- Положение на весь экран
+        imageLabel.BackgroundTransparency = 1 -- Прозрачный фон
+        imageLabel.Image = "rbxassetid://<YOUR_IMAGE_ASSET_ID>" -- Замените на ID вашего изображения
+        imageLabel.Parent = screenGui
+        
+        wait(math.random(5, 8)) -- Ждем случайное количество секунд от 5 до 8
+        
+        imageLabel:Destroy() -- Удаляем изображение
+    end
+end
+
+-- Запускаем функцию для отображения случайных изображений
+coroutine.wrap(showRandomImage)()
