@@ -1,0 +1,38 @@
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+
+local messageFrame = Instance.new("Frame")
+messageFrame.Size = UDim2.new(1, 0, 1, 0)
+messageFrame.BackgroundTransparency = 0.5
+messageFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+messageFrame.Parent = screenGui
+
+local messageLabel = Instance.new("TextLabel")
+messageLabel.Text = "СОШКА ТИБЯ ВЗЛАМАЛ😈"
+messageLabel.Size = UDim2.new(0.8, 0, 0.2, 0)
+messageLabel.Position = UDim2.new(0.1, 0, 0.4, 0)
+messageLabel.BackgroundTransparency = 1
+messageLabel.TextColor3 = Color3.new(1, 0, 0)
+messageLabel.Font = Enum.Font.SourceSansBold
+messageLabel.TextScaled = true
+messageLabel.Parent = messageFrame
+
+
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://1843660600" -- Замените на ID нужного вам звука
+sound.Volume = 10 -- Установите громкость
+sound.Parent = game.Workspace
+
+
+local function showEffect()
+    sound:Play()
+    messageFrame.Visible = true
+    
+
+    wait(10)
+    messageFrame.Visible = false
+end
+
+
+showEffect()
